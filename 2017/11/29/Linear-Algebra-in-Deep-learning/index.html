@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="matrix,Linear Algebra,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="只涉及到与理解deep learning有关的线性代数部分。详细请参考《The Matrix Cookbook》。 Scalars, Vectors, Matrices and Tensors scalars：单纯数字。 $a = a^\top$ Vectors：数字的数组。（只含有一列的矩阵，如无特别说明，所提到的向量都为列向量） Matrices：矩阵。2维数组。$\mathbf{A}_{i,">
+<meta name="keywords" content="matrix,Linear Algebra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linear Algebra in Deep learning">
+<meta property="og:url" content="http://sayarara.github.io/2017/11/29/Linear-Algebra-in-Deep-learning/index.html">
+<meta property="og:site_name" content="Sayarara&#39;s notebook">
+<meta property="og:description" content="只涉及到与理解deep learning有关的线性代数部分。详细请参考《The Matrix Cookbook》。 Scalars, Vectors, Matrices and Tensors scalars：单纯数字。 $a = a^\top$ Vectors：数字的数组。（只含有一列的矩阵，如无特别说明，所提到的向量都为列向量） Matrices：矩阵。2维数组。$\mathbf{A}_{i,">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-01-30T17:46:58.561Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linear Algebra in Deep learning">
+<meta name="twitter:description" content="只涉及到与理解deep learning有关的线性代数部分。详细请参考《The Matrix Cookbook》。 Scalars, Vectors, Matrices and Tensors scalars：单纯数字。 $a = a^\top$ Vectors：数字的数组。（只含有一列的矩阵，如无特别说明，所提到的向量都为列向量） Matrices：矩阵。2维数组。$\mathbf{A}_{i,">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://sayarara.github.io/2017/11/29/Linear-Algebra-in-Deep-learning/">
+
+
+
+
+
+  <title>Linear Algebra in Deep learning | Sayarara's notebook</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sayarara's notebook</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">blogs/notes/readings</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://sayarara.github.io/2017/11/29/Linear-Algebra-in-Deep-learning/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sayarara">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sayarara's notebook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linear Algebra in Deep learning</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-29T16:47:56+08:00">
+                2017-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/notes-math/" itemprop="url" rel="index">
+                    <span itemprop="name">notes.math</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>只涉及到与理解deep learning有关的线性代数部分。详细请参考《The Matrix Cookbook》。</p>
+<h3 id="Scalars-Vectors-Matrices-and-Tensors"><a href="#Scalars-Vectors-Matrices-and-Tensors" class="headerlink" title="Scalars, Vectors, Matrices and Tensors"></a>Scalars, Vectors, Matrices and Tensors</h3><ol>
+<li>scalars：单纯数字。 $a = a^\top$</li>
+<li>Vectors：数字的数组。（只含有一列的矩阵，如无特别说明，所提到的向量都为列向量）</li>
+<li>Matrices：矩阵。2维数组。$\mathbf{A}_{i,:}$ 矩阵A的第i行， $\mathbf{A}_{:,j}$ 矩阵A的第j列。 </li>
+<li>Tensors：张量。3维</li>
+</ol>
+<h3 id="transpose"><a href="#transpose" class="headerlink" title="transpose"></a>transpose</h3><p>转置。沿主对角线做镜像翻转。 $(\mathbf{A}^\top)_{ij}=\mathbf{A}_{ji}$</p>
+<h3 id="矩阵乘法"><a href="#矩阵乘法" class="headerlink" title="矩阵乘法"></a>矩阵乘法</h3><ol>
+<li><strong>distributive</strong>: $A(B+C) = AB+AC$</li>
+<li><strong>associative</strong>: $A(BC) = (AB)C$</li>
+<li><strong>not commutative</strong>: $AB = BA$不总是满足。但向量的点乘满足：$x^\top y = y^\top x$</li>
+<li><strong>矩阵乘积的转置</strong>: $(AB)^\top = B^\top A^\top$</li>
+<li><strong>线性等式的矩阵形式</strong>: $Ax=b$ A矩阵，x：变量，列向量。b：列向量。</li>
+</ol>
+<h3 id="Identity-and-Inverse-Matrices"><a href="#Identity-and-Inverse-Matrices" class="headerlink" title="Identity and Inverse Matrices"></a>Identity and Inverse Matrices</h3><p><strong>identity matrix</strong>:  $I_n$, 主对角线上n个元素都为1，其余元素全为0的矩阵。<br><strong>matrix inverse</strong>:  $A^{-1}A = I_n$</p>
+<h3 id="Linear-Dependence-and-Span"><a href="#Linear-Dependence-and-Span" class="headerlink" title="Linear Dependence and Span"></a>Linear Dependence and Span</h3><h4 id="space-amp-subspace"><a href="#space-amp-subspace" class="headerlink" title="space &amp; subspace"></a>space &amp; subspace</h4><p>space: 空间内的元素对加法和乘法封闭，即任意的加或者乘，所得的结果仍然属于该空间。<br>subspace：W是线性空间V的一个非空子集，如果 W对于V 中定义的加法和乘法也构成线性空间，那么就成W是V的线性子空间。</p>
+<h4 id="span-amp-range"><a href="#span-amp-range" class="headerlink" title="span &amp; range"></a>span &amp; range</h4><p>设有一个列向量集合$\\{v^1,v^2,…,v^n\\}$<br>linear combination：  $\sum_i{c_iv^i}$<br>span: 向量的所有线性组合<br>column space/ range of A：矩阵A中列向量的span<br>null space: 矩阵A的零空间为 使A中的列向量组合和为零</p>
+<h4 id="线性方程组有解的条件"><a href="#线性方程组有解的条件" class="headerlink" title="线性方程组有解的条件"></a>线性方程组有解的条件</h4><p>$Ax=b$是否有解取决于b是否存在于矩阵A的列空间中。<br>对任意$b \in \mathbb{R}^m$要求有解，要求A的列空间为所有的$\mathbb{R}^m$。如果$\mathbb{R}^m$中存在一个点，在列空间之外，则该点对应的b不存在解。</p>
+<p>有解的necessary condition：矩阵A的列数量 $n \ge m$。 m列中可能存在冗余（称为linear dependence）。<br>有解的necessary and sufficient condition：矩阵A中包含m列线性独立的列。the matrix must contain at least one set of m linearly independent columns.</p>
+<h4 id="矩阵有逆的条件"><a href="#矩阵有逆的条件" class="headerlink" title="矩阵有逆的条件"></a>矩阵有逆的条件</h4><p>有唯一解，矩阵为方阵（square，n=m）且m列线性独立。<br>    singular matrix：A square matrix with linearly dependent columns </p>
+<p>如果矩阵A不是方阵，或者A是singular矩阵，则不能使用matrix inversion。</p>
+<h3 id="Special-Kinds-of-Matrices-and-Vectors"><a href="#Special-Kinds-of-Matrices-and-Vectors" class="headerlink" title="Special Kinds of Matrices and Vectors"></a>Special Kinds of Matrices and Vectors</h3><h4 id="Diagonal-matrices"><a href="#Diagonal-matrices" class="headerlink" title="Diagonal matrices"></a>Diagonal matrices</h4><p>主对角线元素非零，其余元素为零的矩阵。<br>对角线上元素相等的对角矩阵称为数量矩阵；对角线上元素全为1的对角矩阵称为单位矩阵。</p>
+<p>性质：</p>
+<ul>
+<li>和差运算：同阶对角阵的和、差仍是对角阵</li>
+<li>数乘运算：数与对角阵的乘积仍为对角阵</li>
+<li>乘积运算：同阶对角矩阵的乘积仍为对角阵，且它们的乘积是可交换的，即AB=BA</li>
+</ul>
+<p>diag(v): a square diagonal matrix whose diagonal entries are given by the entries of the vector v.</p>
+<p>对角矩阵的乘法运算非常高效，$diag(v)x=v \odot x$</p>
+<p>只有当主对角线上元素全为非零元素时，对角矩阵的逆存在。$diag(v)^{-1} = diag([1/v_1,…,1/v_n]^\top)$</p>
+<h4 id="symmetric-matrix"><a href="#symmetric-matrix" class="headerlink" title="symmetric matrix"></a>symmetric matrix</h4><p>\begin{equation}<br>    A = A^\top<br>\end{equation}</p>
+<h4 id="unit-vector-单位向量"><a href="#unit-vector-单位向量" class="headerlink" title="unit vector 单位向量"></a>unit vector 单位向量</h4><p>范数为1的向量。$||x||_2 = 1$</p>
+<h4 id="orthogonal-matrix-正交矩阵"><a href="#orthogonal-matrix-正交矩阵" class="headerlink" title="orthogonal matrix 正交矩阵"></a>orthogonal matrix 正交矩阵</h4><p>当向量x和y满足 $x^\top y = 0$时，x和y垂直。如果向量不但垂直而且范数为1，则称之为<strong>orthonormal</strong>.</p>
+<p>orthogonal matrix: a square matrix whose rows are mutually orthonormal and whose columns are mutually orthonormal<br>如果A是正交矩阵</p>
+<ol>
+<li>$A^\top 是正交矩阵$</li>
+<li>$A^\top A = A A^\top = I$ (I为单位矩阵)</li>
+<li>A的各行是单位向量且两两正交</li>
+<li>A的各列是单位向量且两两正交</li>
+<li>$A^{-1} = A^\top$</li>
+</ol>
+<h3 id="The-Trace-Operator-（矩阵的迹）"><a href="#The-Trace-Operator-（矩阵的迹）" class="headerlink" title="The Trace Operator （矩阵的迹）"></a>The Trace Operator （矩阵的迹）</h3><p>矩阵A的迹是矩阵A的主对角线上各个元素的总和。 (迹是所有特征值的和)<br>\begin{equation}<br>    Tr(A) = \sum_i A_{ii}<br>\end{equation}</p>
+<h4 id="矩阵范数-Frobenius-norm-的迹形式："><a href="#矩阵范数-Frobenius-norm-的迹形式：" class="headerlink" title="矩阵范数(Frobenius norm)的迹形式："></a>矩阵范数(Frobenius norm)的迹形式：</h4><p>\begin{equation}<br>    ||A||_F = \sqrt {Tr(AA^T)}<br>\end{equation}</p>
+<h4 id="迹的不变性-（invariant）"><a href="#迹的不变性-（invariant）" class="headerlink" title="迹的不变性 （invariant）"></a>迹的不变性 （invariant）</h4><ul>
+<li>$Tr(A)=Tr(A^\top)$  invariant to the transpose operator</li>
+<li>$Tr(ABC) = Tr(CAB) = Tr(BCA)$</li>
+<li>$Tr(A_{m \times n}B_{n \times m}) = Tr(B_{n \times m}A_{m \times n})$</li>
+<li>$a = Tr(a)$   a scalar is its own trace</li>
+<li>$Tr(mA+nB)=m Tr(A)+n Tr(B)$</li>
+</ul>
+<h3 id="The-Determinant-矩阵的行列式"><a href="#The-Determinant-矩阵的行列式" class="headerlink" title="The Determinant  矩阵的行列式"></a>The Determinant  矩阵的行列式</h3><p>det(A)： 方阵A的行列式</p>
+<p>The determinant is equal to the product of all the eigenvalues of the matrix. </p>
+<p>行列时的性质：<br><a href="https://en.wikipedia.org/wiki/Determinant" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Determinant</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/matrix/" rel="tag"># matrix</a>
+          
+            <a href="/tags/Linear-Algebra/" rel="tag"># Linear Algebra</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/23/matlab稀疏矩阵/" rel="next" title="matlab稀疏矩阵">
+                <i class="fa fa-chevron-left"></i> matlab稀疏矩阵
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/30/matrix-decomposition-in-deep-learning/" rel="prev" title="matrix decomposition in deep learning">
+                matrix decomposition in deep learning <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Sayarara</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Scalars-Vectors-Matrices-and-Tensors"><span class="nav-number">1.</span> <span class="nav-text">Scalars, Vectors, Matrices and Tensors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transpose"><span class="nav-number">2.</span> <span class="nav-text">transpose</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#矩阵乘法"><span class="nav-number">3.</span> <span class="nav-text">矩阵乘法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Identity-and-Inverse-Matrices"><span class="nav-number">4.</span> <span class="nav-text">Identity and Inverse Matrices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linear-Dependence-and-Span"><span class="nav-number">5.</span> <span class="nav-text">Linear Dependence and Span</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#space-amp-subspace"><span class="nav-number">5.1.</span> <span class="nav-text">space &amp; subspace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#span-amp-range"><span class="nav-number">5.2.</span> <span class="nav-text">span &amp; range</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线性方程组有解的条件"><span class="nav-number">5.3.</span> <span class="nav-text">线性方程组有解的条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#矩阵有逆的条件"><span class="nav-number">5.4.</span> <span class="nav-text">矩阵有逆的条件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Special-Kinds-of-Matrices-and-Vectors"><span class="nav-number">6.</span> <span class="nav-text">Special Kinds of Matrices and Vectors</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Diagonal-matrices"><span class="nav-number">6.1.</span> <span class="nav-text">Diagonal matrices</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#symmetric-matrix"><span class="nav-number">6.2.</span> <span class="nav-text">symmetric matrix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unit-vector-单位向量"><span class="nav-number">6.3.</span> <span class="nav-text">unit vector 单位向量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#orthogonal-matrix-正交矩阵"><span class="nav-number">6.4.</span> <span class="nav-text">orthogonal matrix 正交矩阵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Trace-Operator-（矩阵的迹）"><span class="nav-number">7.</span> <span class="nav-text">The Trace Operator （矩阵的迹）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#矩阵范数-Frobenius-norm-的迹形式："><span class="nav-number">7.1.</span> <span class="nav-text">矩阵范数(Frobenius norm)的迹形式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迹的不变性-（invariant）"><span class="nav-number">7.2.</span> <span class="nav-text">迹的不变性 （invariant）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Determinant-矩阵的行列式"><span class="nav-number">8.</span> <span class="nav-text">The Determinant  矩阵的行列式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sayarara</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
